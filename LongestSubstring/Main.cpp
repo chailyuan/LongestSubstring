@@ -1,4 +1,5 @@
 #include <string>
+#include <math.h>
 
 using namespace std;
 
@@ -6,37 +7,32 @@ using namespace std;
 class Solution {
 public:
 	int lengthOfLongestSubstring(string s) {
+		int count[256]={0};
 		int length = s.length();
-		int max=0;
+		int maxlength=1;
 		if (length<=1)
 		{
 			return length;
 		}
-		
-		for (int i = 0; i < length;i++)
-		{
-			for (int j = i+1; j < length;j++)
-			{
-				for (int k = i; k < j;k++)
-				{
-					if(s[k] == s[j])
-					{
-						if (j - i >= max)
-						{
-							max = j - i;
-						}
-						j = length + 1;
-						break;
 
-					}
-					
+		for (int i = 0; i < length-maxlength;++i)
+		{
+			memset(count,0,256*sizeof(int));
+			int j =i;
+			for (;j<length;++j)
+			{
+				if (count[s[j]]++ == 1)
+				{
+					maxlength = max(maxlength,j-i);
+					break;
 				}
-				if(j != length + 1)
-					if (j - i + 1 >= max)
-						max = j - i + 1;
+			}
+			if (j==length)
+			{
+				maxlength = max(maxlength,j-i);
 			}
 		}
-		return max;
+		return maxlength;
 	}
 };
 
@@ -44,7 +40,13 @@ int main()
 {
 	Solution s;
 
-	string str = "abba";
+	string str = "abcdabcbb";
+
+	int j=0;
+	if (j++==0)
+	{
+		j=0;
+	}
 
 	int r = s.lengthOfLongestSubstring(str);
 }
