@@ -1,5 +1,7 @@
 #include <string>
 #include <math.h>
+#include <hash_map>
+#include <map>
 
 using namespace std;
 
@@ -7,32 +9,20 @@ using namespace std;
 class Solution {
 public:
 	int lengthOfLongestSubstring(string s) {
-		int count[256]={0};
-		int length = s.length();
-		int maxlength=1;
-		if (length<=1)
-		{
-			return length;
+		
+		int ref[256];
+		fill_n(ref, 256, -1);
+		int left = 0;
+		int length = 0;
+		for (int i = 0; i<s.length(); i++) {
+			if (ref[(int)s[i]]+1>left) 
+				left = ref[(int)s[i]] + 1;
+			else if ((i - left)>length - 1) 
+				length = (i - left + 1);
+			ref[(int)s[i]] = i;
 		}
+		return length;
 
-		for (int i = 0; i < length-maxlength;++i)
-		{
-			memset(count,0,256*sizeof(int));
-			int j =i;
-			for (;j<length;++j)
-			{
-				if (count[s[j]]++ == 1)
-				{
-					maxlength = max(maxlength,j-i);
-					break;
-				}
-			}
-			if (j==length)
-			{
-				maxlength = max(maxlength,j-i);
-			}
-		}
-		return maxlength;
 	}
 };
 
@@ -40,7 +30,7 @@ int main()
 {
 	Solution s;
 
-	string str = "abcdabcbb";
+	string str = "abcd";
 
 	int j=0;
 	if (j++==0)
